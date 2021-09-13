@@ -24,7 +24,9 @@ class RemoteJobFragment : Fragment(R.layout.fragment_remote_job) {
 
     private var _binding: FragmentRemoteJobBinding? = null
     private val binding get() = _binding!!
-    val viewModel: RemoteJobViewModel by viewModels()
+    val viewModel: RemoteJobViewModel by viewModels{
+        RemoteJobViewModelFactory(requireActivity(). application, RemoteJobRepository())
+    }
 
     private lateinit var remoteJobAdapter: RemoteJobAdapter
 
@@ -38,7 +40,7 @@ class RemoteJobFragment : Fragment(R.layout.fragment_remote_job) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        setUpRecyclerView()
     }
 
     private fun setUpRecyclerView(){

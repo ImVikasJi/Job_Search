@@ -10,13 +10,10 @@ import com.bumptech.glide.Glide
 import com.example.jobsearch.databinding.JobLayoutAdapterBinding
 import com.example.jobsearch.models.Job
 import com.example.jobsearch.ui.fragments.MainFragmentDirections
-import com.example.jobsearch.viewmodel.RemoteJobViewModel
-import kotlinx.coroutines.internal.MissingMainCoroutineDispatcherFactory
 
 class RemoteJobAdapter : RecyclerView.Adapter<RemoteJobAdapter.RemoteJobViewHolder>() {
 
-    private var _binding: JobLayoutAdapterBinding? = null
-    private var binding = _binding!!
+    private var binding: JobLayoutAdapterBinding? = null
 
     inner class RemoteJobViewHolder(itemBinding: JobLayoutAdapterBinding) :
         RecyclerView.ViewHolder(itemBinding.root)
@@ -36,24 +33,26 @@ class RemoteJobAdapter : RecyclerView.Adapter<RemoteJobAdapter.RemoteJobViewHold
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RemoteJobViewHolder {
         binding =
             JobLayoutAdapterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return RemoteJobViewHolder(binding)
+        return RemoteJobViewHolder(binding!!)
     }
 
     override fun onBindViewHolder(holder: RemoteJobViewHolder, position: Int) {
         val currentJob = differ.currentList[position]
 
         holder.itemView.apply {
-            Glide.with(this)
-                .load(currentJob.companyLogoUrl)
-                .into(binding.ivCompanyLogo)
+            binding?.let {
+                Glide.with(this)
+                    .load(currentJob.companyLogoUrl)
+                    .into(it.ivCompanyLogo)
+            }
 
-            binding.tvCompanyName.text = currentJob.companyName
-            binding.tvJobLocation.text = currentJob.candidateRequiredLocation
-            binding.tvJobTitle.text = currentJob.title
-            binding.tvJobType.text = currentJob.jobType
+            binding?.tvCompanyName?.text = currentJob.companyName
+            binding?.tvJobLocation?.text = currentJob.candidateRequiredLocation
+            binding?.tvJobTitle?.text = currentJob.title
+            binding?.tvJobType?.text = currentJob.jobType
 
             val dateJob = currentJob.publicationDate.split("T")
-            binding.tvDate.text = dateJob.get(0)
+            binding?.tvDate?.text = dateJob.get(0)
         }.setOnClickListener { mView ->
             val direction = MainFragmentDirections.actionMainFragmentToJobDetailsFragment()
 
