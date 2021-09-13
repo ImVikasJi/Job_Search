@@ -5,56 +5,65 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.ListAdapter
+import androidx.activity.viewModels
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.jobsearch.R
+import com.example.jobsearch.adapter.RemoteJobAdapter
+import com.example.jobsearch.databinding.FragmentRemoteJobBinding
+import com.example.jobsearch.repository.RemoteJobRepository
+import com.example.jobsearch.viewmodel.RemoteJobViewModel
+import com.example.jobsearch.viewmodel.RemoteJobViewModelFactory
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [RemoteJobFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class RemoteJobFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class RemoteJobFragment : Fragment(R.layout.fragment_remote_job) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentRemoteJobBinding? = null
+    private val binding get() = _binding!!
+    val viewModel: RemoteJobViewModel by viewModels()
+
+    private lateinit var remoteJobAdapter: RemoteJobAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_remote_job, container, false)
+        _binding = FragmentRemoteJobBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment RemoteJobFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RemoteJobFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
+    private fun setUpRecyclerView(){
+        remoteJobAdapter = RemoteJobAdapter()
+
+        binding.rvRemoteJobs.apply {
+            layoutManager = LinearLayoutManager(activity)
+            setHasFixedSize(true)
+            addItemDecoration(object : DividerItemDecoration(activity,LinearLayout.HORIZONTAL){})
+
+            adapter = remoteJobAdapter
+        }
+        fetchingData()
+    }
+
+    private fun fetchingData() {
+        viewModel.remoteJobResult().observe(viewLifecycleOwner){ remoteJob ->
+            if(remoteJob != null){
+                remoteJobAdapter.differ.submitList(remoteJob.jobs)
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
