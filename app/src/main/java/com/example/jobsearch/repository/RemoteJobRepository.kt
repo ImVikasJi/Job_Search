@@ -4,16 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.jobsearch.api.RetrofitInstance
 import com.example.jobsearch.models.RemoteJobResponse
-import retrofit2.Retrofit
 
 class RemoteJobRepository {
 
     private val remoteJobApi = RetrofitInstance.apiService
-    private val remoteJobResponseLiveData: MutableLiveData<RemoteJobResponse> = MutableLiveData()
+    private val remoteJobResponseLiveData = MutableLiveData<RemoteJobResponse>()
 
-    suspend fun getRemoteJobResponse() = RetrofitInstance.apiService.getRemoteJobResponse()
+    val jobs: LiveData<RemoteJobResponse>
+        get() = remoteJobResponseLiveData
 
-    fun remoteJobResult(): LiveData<RemoteJobResponse>{
-        return remoteJobResponseLiveData
+    suspend fun getRemoteJobResponse() {
+        val result = remoteJobApi.getRemoteJobResponse()
+        if(result.body() != null){
+            remoteJobResponseLiveData.postValue(result.body())
+        }
     }
 }

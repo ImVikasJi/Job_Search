@@ -16,16 +16,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private var _binding: FragmentMainBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+    ): View {
+        _binding = FragmentMainBinding.inflate(
+            inflater,
+            container,
+            false
+        )
         return binding.root
     }
 
@@ -38,9 +37,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         val adapter = FragmentPagerItemAdapter(
             childFragmentManager,
             FragmentPagerItems.with(activity)
-                .add("Jobs",RemoteJobFragment::class.java)
-                .add("Search",SearchJobFragment::class.java)
-                .add("Saved",SavedJobFragment::class.java)
+                .add("Jobs", RemoteJobFragment::class.java)
+                .add("Search", SearchJobFragment::class.java)
+                .add("Saved Jobs", SavedJobFragment::class.java)
                 .create()
         )
 
