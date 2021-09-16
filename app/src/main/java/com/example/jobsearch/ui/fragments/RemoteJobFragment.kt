@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.jobsearch.R
 import com.example.jobsearch.adapter.RemoteJobAdapter
 import com.example.jobsearch.databinding.FragmentRemoteJobBinding
+import com.example.jobsearch.db.FavouriteDatabase
 import com.example.jobsearch.repository.RemoteJobRepository
 import com.example.jobsearch.utils.Constants.TAG1
 import com.example.jobsearch.viewmodel.RemoteJobViewModel
@@ -25,7 +26,8 @@ class RemoteJobFragment : Fragment(R.layout.fragment_remote_job) {
     private val binding get() = _binding!!
 
     val viewModel: RemoteJobViewModel by viewModels {
-        RemoteJobViewModelFactory(requireActivity().application, RemoteJobRepository())
+        RemoteJobViewModelFactory(requireActivity().application, RemoteJobRepository(
+            FavouriteDatabase.invoke(requireContext())))
     }
 
     private lateinit var remoteJobAdapter: RemoteJobAdapter
