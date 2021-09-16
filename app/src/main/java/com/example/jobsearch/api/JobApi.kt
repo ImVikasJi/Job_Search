@@ -7,6 +7,6 @@ import retrofit2.http.GET
 
 interface JobApi {
 
-    @GET("remote-jobs")
+    @GET("remote-jobs?limit=5")
     suspend fun getRemoteJobResponse(): Response<RemoteJobResponse>
 }

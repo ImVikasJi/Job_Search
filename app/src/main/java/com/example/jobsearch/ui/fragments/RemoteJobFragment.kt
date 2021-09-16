@@ -2,26 +2,21 @@ package com.example.jobsearch.ui.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.ListAdapter
-import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.jobsearch.R
 import com.example.jobsearch.adapter.RemoteJobAdapter
 import com.example.jobsearch.databinding.FragmentRemoteJobBinding
-import com.example.jobsearch.models.Job
 import com.example.jobsearch.repository.RemoteJobRepository
+import com.example.jobsearch.utils.Constants.TAG1
 import com.example.jobsearch.viewmodel.RemoteJobViewModel
 import com.example.jobsearch.viewmodel.RemoteJobViewModelFactory
-import kotlinx.coroutines.flow.MutableStateFlow
 
 
 class RemoteJobFragment : Fragment(R.layout.fragment_remote_job) {
@@ -63,6 +58,7 @@ class RemoteJobFragment : Fragment(R.layout.fragment_remote_job) {
 
     private fun fetchingData() {
         viewModel.jobs.observe(viewLifecycleOwner) { remoteJob ->
+            Log.d(TAG1, "fetchingData: ${remoteJob.jobs}")
             if (remoteJob != null) {
                 remoteJobAdapter.differ.submitList(remoteJob.jobs)
             }
