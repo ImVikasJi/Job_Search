@@ -1,6 +1,8 @@
 package com.example.jobsearch.adapter
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -12,7 +14,9 @@ import com.example.jobsearch.models.FavouriteJob
 import com.example.jobsearch.models.Job
 import com.example.jobsearch.ui.fragments.MainFragmentDirections
 
-class FavJobAdapter : RecyclerView.Adapter<FavJobAdapter.RemoteJobViewHolder>() {
+class FavJobAdapter(
+    private val itemClick: OnItemClickListener
+) : RecyclerView.Adapter<FavJobAdapter.RemoteJobViewHolder>() {
 
     private var binding: JobLayoutAdapterBinding? = null
 
@@ -51,6 +55,7 @@ class FavJobAdapter : RecyclerView.Adapter<FavJobAdapter.RemoteJobViewHolder>() 
             binding?.tvJobLocation?.text = currentJob.candidateRequiredLocation
             binding?.tvJobTitle?.text = currentJob.title
             binding?.tvJobType?.text = currentJob.jobType
+            binding?.ibDelete?.visibility = View.VISIBLE
 
             val dateJob = currentJob.publicationDate.split("T")
             binding?.tvDate?.text = dateJob.get(0)
@@ -76,7 +81,21 @@ class FavJobAdapter : RecyclerView.Adapter<FavJobAdapter.RemoteJobViewHolder>() 
 
             mView.findNavController().navigate(direction)
         }
+
+        holder.itemView.apply {
+            binding?.ibDelete?.setOnClickListener {
+                itemClick.onItemClick(currentJob,binding?.ibDelete!!,position)
+            }
+        }
     }
 
     override fun getItemCount(): Int = differ.currentList.size
+
+    interface OnItemClickListener{
+        fun onItemClick(
+            job: FavouriteJob,
+            view: View,
+            position: Int
+        )
+    }
 }
