@@ -4,14 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.load.engine.Resource
 import com.example.jobsearch.models.FavouriteJob
+import com.example.jobsearch.models.Job
 import com.example.jobsearch.models.RemoteJobResponse
 import com.example.jobsearch.repository.RemoteJobRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
-import okio.IOException
 
 class RemoteJobViewModel(
     app: Application,
@@ -39,6 +37,10 @@ class RemoteJobViewModel(
         remoteJobRepository.deleteJob(job)
     }
 
-    fun getAllFavouriteJobs() = remoteJobRepository.getAllFavJobs()
+    fun getAllFavouriteJobs() = remoteJobRepository.getAllFavJob()
+
+    fun saveJob(job: FavouriteJob) = viewModelScope.launch {
+        remoteJobRepository.addFavouriteJob(job)
+    }
 
 }
