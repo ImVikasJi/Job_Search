@@ -37,7 +37,7 @@ class JobDetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentJobDetailsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -77,7 +77,7 @@ class JobDetailsFragment : Fragment() {
     private fun setUpWebView() {
         binding.webView.apply {
             webViewClient = WebViewClient()
-            currentJob.url?.let {
+            currentJob.url.let {
                 loadUrl(it)
                 Toast.makeText(requireContext(), "WebView Loaded", Toast.LENGTH_SHORT).show()
             }

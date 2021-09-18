@@ -11,6 +11,7 @@ class RemoteJobRepository(val db : FavouriteDatabase) {
 
     private val remoteJobApi = RetrofitInstance.apiService
     private val remoteJobResponseLiveData = MutableLiveData<RemoteJobResponse>()
+    private val searchRemoteJobLiveData: MutableLiveData<RemoteJobResponse> = MutableLiveData()
 
     val jobs: LiveData<RemoteJobResponse>
         get() = remoteJobResponseLiveData
@@ -21,6 +22,10 @@ class RemoteJobRepository(val db : FavouriteDatabase) {
             remoteJobResponseLiveData.postValue(result.body())
         }
     }
+
+    suspend fun searchJob(searchQuery: String) = RetrofitInstance.apiService.searchJob(searchQuery)
+
+    fun searchJobResult(): LiveData<RemoteJobResponse> = searchRemoteJobLiveData
 
     suspend fun addFavouriteJob(job: FavouriteJob) = db.getFavJobDao().addFavouriteJob(job)
     suspend fun deleteJob(job: FavouriteJob) = db.getFavJobDao().deleteFavJob(job)

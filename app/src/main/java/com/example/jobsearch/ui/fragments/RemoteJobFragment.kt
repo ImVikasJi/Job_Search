@@ -60,7 +60,6 @@ class RemoteJobFragment : Fragment(R.layout.fragment_remote_job) {
 
     private fun fetchingData() {
         viewModel.jobs.observe(viewLifecycleOwner) { remoteJob ->
-            Log.d(TAG1, "fetchingData: ${remoteJob.jobs}")
             if (remoteJob != null) {
                 remoteJobAdapter.differ.submitList(remoteJob.jobs)
             }

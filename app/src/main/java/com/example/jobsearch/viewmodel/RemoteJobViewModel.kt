@@ -1,6 +1,7 @@
 package com.example.jobsearch.viewmodel
 
 import android.app.Application
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
@@ -10,6 +11,7 @@ import com.example.jobsearch.models.RemoteJobResponse
 import com.example.jobsearch.repository.RemoteJobRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.http.Query
 
 class RemoteJobViewModel(
     app: Application,
@@ -39,8 +41,14 @@ class RemoteJobViewModel(
 
     fun getAllFavouriteJobs() = remoteJobRepository.getAllFavJob()
 
-    fun saveJob(job: FavouriteJob) = viewModelScope.launch {
-        remoteJobRepository.addFavouriteJob(job)
+    fun searchJob(searchQuery: String?) = viewModelScope.launch(Dispatchers.IO) {
+        if (searchQuery != null) {
+            remoteJobRepository.searchJob(searchQuery)
+        }else{
+            Toast.makeText(getApplication(), "Nothing to show", Toast.LENGTH_SHORT).show()
+        }
     }
+
+    fun searchJobResult() = remoteJobRepository.searchJobResult()
 
 }
